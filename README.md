@@ -1,0 +1,1 @@
+# vigoshop_ad_generator
