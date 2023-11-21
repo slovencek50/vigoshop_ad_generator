@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask DataFrame Example</title>
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .text-input {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .language-dropdown {
+            margin-bottom: 10px;
+        }
+        .response-container {
+            margin-top: 40px; /* Adjusted margin-top */
+            background-color: #f0f0f0; /* Gray background color */
+            padding: 10px; /* Padding for better visibility */
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        {% if page > 0 %}
+            <button onclick="prevPage()">Previous Page</button>
+        {% endif %}
+        <div class="language-dropdown">
+        <label for="generation-language">Select generation language:</label>
+        <select id="generation-language" name="generation-language">
+            <option value="slovenian">Slovenian</option>
+            <option value="english" selected>English</option>
+        </select>
+    </div>
+        {% if page < total_pages %}
+            <button onclick="nextPage()">Next Page</button>
+        {% endif %}
+    </div>
+    <div style="display: flex; justify-content: space-between; margin: 20px;">
+        {% for _, row in data.iterrows() %}
+            <div style="flex: 1; text-align: center;">
+                <h3>{{ row.additional_name }}</h3>
+
+                <p>{{ row.price }}</p>
+                
+                    <div>
+                        <img src="{{ row.img_url }}" alt="Image" style="width: 345" height="324">
+                    </div>
+                <div>
+    <label for="target-audience-{{ loop.index }}">Target audience:</label>
+    <input type="text" id="target-audience-{{ loop.index }}" name="target-audience" class="text-input" value="{{ row.target_audience }}">
+</div>
+
+<div>
+    <label for="must-include-text-{{ loop.index }}">Must include text:</label>
+    <input type="text" id="must-include-text-{{ loop.index }}" name="must-include-text" class="text-input" value="{{ row.must_include_text }}">
+</div>
+
+<button onclick="generateAd{{ loop.index }}('{{ row.additional_name }}', '{{ row.name }}', 'response-container-{{ loop.index }}')">Generate Ad</button>
+
+<div class="response-container" id="response-container-{{ loop.index }}">
+    <!-- Response will be displayed here -->
+</div>
+
+
+            </div>
+        {% endfor %}
+    </div>
+
+    
+
+
+<script>
+    // JavaScript functions to handle page navigation
+    function nextPage() {
+        window.location.href = '?page=' + ({{ page }} + 1);
+    }
+
+    function prevPage() {
+        window.location.href = '?page=' + ({{ page }} - 1);
+    }
+
+    // Function to generate ad
+    function generateAd(additionalName, productName, responseContainerId) {
+        var num_ = (parseInt(productName)+1).toString();
+        console.log('target-audience-'+num_);
+        var generationLanguage = document.getElementById('generation-language').value;
+        var targetAudience = document.getElementById('target-audience-'+num_).value;
+        var mustIncludeText = document.getElementById('must-include-text-'+num_).value;
+
+        // Make an AJAX request to the Flask server
+        fetch('/generate_ad', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: productName,
+                target_group: targetAudience,
+                must_use_words: mustIncludeText,
+                language: generationLanguage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Ad generated:', data);
+            // Display the response in the corresponding response container without quotes
+            document.getElementById(responseContainerId).innerText = data.result;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Display an error message in the corresponding response container
+            document.getElementById(responseContainerId).innerText = 'Error: ' + error.message;
+        });
+    }
+    
+        
+    function generateAd1(additionalName, productName, responseContainerId) {
+        var num_ = (parseInt(productName)+1).toString();
+        console.log('target-audience-'+num_);
+        var generationLanguage = document.getElementById('generation-language').value;
+        var targetAudience = document.getElementById('target-audience-1').value;
+        var mustIncludeText = document.getElementById('must-include-text-1').value;
+
+        // Make an AJAX request to the Flask server
+        fetch('/generate_ad', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: productName,
+                target_group: targetAudience,
+                must_use_words: mustIncludeText,
+                language: generationLanguage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Ad generated:', data);
+            // Display the response in the corresponding response container without quotes
+            document.getElementById(responseContainerId).innerText = data.result;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Display an error message in the corresponding response container
+            document.getElementById(responseContainerId).innerText = 'Error: ' + error.message;
+        });
+    }
+    
+    
+    function generateAd2(additionalName, productName, responseContainerId) {
+        var num_ = (parseInt(productName)+1).toString();
+        console.log('target-audience-'+num_);
+        var generationLanguage = document.getElementById('generation-language').value;
+        var targetAudience = document.getElementById('target-audience-2').value;
+        var mustIncludeText = document.getElementById('must-include-text-2').value;
+
+        // Make an AJAX request to the Flask server
+        fetch('/generate_ad', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: productName,
+                target_group: targetAudience,
+                must_use_words: mustIncludeText,
+                language: generationLanguage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Ad generated:', data);
+            // Display the response in the corresponding response container without quotes
+            document.getElementById(responseContainerId).innerText = data.result;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Display an error message in the corresponding response container
+            document.getElementById(responseContainerId).innerText = 'Error: ' + error.message;
+        });
+    }
+    
+    
+    function generateAd3(additionalName, productName, responseContainerId) {
+        var num_ = (parseInt(productName)+1).toString();
+        console.log('target-audience-'+num_);
+        var generationLanguage = document.getElementById('generation-language').value;
+        var targetAudience = document.getElementById('target-audience-3').value;
+        var mustIncludeText = document.getElementById('must-include-text-3').value;
+
+        // Make an AJAX request to the Flask server
+        fetch('/generate_ad', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: productName,
+                target_group: targetAudience,
+                must_use_words: mustIncludeText,
+                language: generationLanguage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Ad generated:', data);
+            // Display the response in the corresponding response container without quotes
+            document.getElementById(responseContainerId).innerText = data.result;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Display an error message in the corresponding response container
+            document.getElementById(responseContainerId).innerText = 'Error: ' + error.message;
+        });
+    }
+</script>
+
+</body>
+</html>
